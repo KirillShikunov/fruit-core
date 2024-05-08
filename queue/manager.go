@@ -3,8 +3,8 @@ package queue
 import (
 	"context"
 	"encoding/json"
-	"fruit-core/event"
-	"fruit-core/rabbitmq"
+	"github.com/KirillShikunov/fruit-core/event"
+	"github.com/KirillShikunov/fruit-core/rabbitmq"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"log"
 )
