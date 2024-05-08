@@ -1,4 +1,4 @@
-module fruit-core
+module github.com/KirillShikunov/fruit-core
 
 go 1.22
 
