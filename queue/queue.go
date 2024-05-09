@@ -9,24 +9,24 @@ import (
 	"log"
 )
 
-type Queue struct {
+type Manager struct {
 	channel *rabbitmq.Channel
 }
 
-func (q *Queue) Post(ctx context.Context, event event.Event) error {
+func (m *Manager) Post(ctx context.Context, event event.Event) error {
 	body, err := json.Marshal(event)
 	if err != nil {
 		return err
 	}
 
-	return q.channel.Publish(ctx, event.Name(), amqp.Publishing{
+	return m.channel.Publish(ctx, event.Name(), amqp.Publishing{
 		ContentType: "application/json",
 		Body:        body,
 	})
 }
 
-func (q *Queue) Listen(ctx context.Context, name string, handler func(e event.Event)) error {
-	return q.channel.Listen(ctx, name, func(delivery amqp.Delivery) {
+func (m *Manager) Listen(ctx context.Context, name string, handler func(e event.Event)) error {
+	return m.channel.Listen(ctx, name, func(delivery amqp.Delivery) {
 		e, err := event.CreateEvent(name)
 		if err != nil {
 			log.Fatalf("Error creating event: %s", err)
@@ -42,6 +42,6 @@ func (q *Queue) Listen(ctx context.Context, name string, handler func(e event.Ev
 	})
 }
 
-func NewManager(channel *rabbitmq.Channel) *Queue {
-	return &Queue{channel}
+func NewManager(channel *rabbitmq.Channel) *Manager {
+	return &Manager{channel}
 }
